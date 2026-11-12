@@ -91,7 +91,7 @@ class FirestoreRepository {
     await _db
         .collection('patients')
         .doc(s.patientId)
-        .collection('sessions')
+        .collection('Printed_sessions')
         .doc(s.sessionId)
         .set({
       ...s.toMap(),
@@ -103,7 +103,7 @@ class FirestoreRepository {
     await _db
         .collection('patients')
         .doc(s.patientId)
-        .collection('sessions')
+        .collection('Printed_sessions')
         .doc(s.sessionId)
         .update({'endTime': Timestamp.fromDate(s.endTime!)});
   }
@@ -112,7 +112,7 @@ class FirestoreRepository {
     return _db
         .collection('patients')
         .doc(patientId)
-        .collection('sessions')
+        .collection('Printed_sessions')
         .orderBy('startTime')
         .snapshots()
         .map((snap) =>
@@ -149,7 +149,7 @@ class FirestoreRepository {
     final ref = _db
         .collection('patients')
         .doc(patientId)
-        .collection('sessions')
+        .collection('Printed_sessions')
         .doc(sessionId)
         .collection('sensors')
         .doc(sensorNumber.toString())
@@ -188,7 +188,7 @@ class FirestoreRepository {
     return _db
         .collection('patients')
         .doc(patientId)
-        .collection('sessions')
+        .collection('Printed_sessions')
         .doc(sessionId)
         .collection('sensors')
         .doc(sensorNumber.toString())
@@ -243,7 +243,7 @@ class FirestoreRepository {
     final snap = await _db
         .collection('patients')
         .doc(patientId)
-        .collection('sessions')
+        .collection('Printed_sessions')
         .doc(sessionId)
         .collection('sensors')
         .doc(sensorNumber.toString())

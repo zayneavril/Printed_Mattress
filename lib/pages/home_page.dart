@@ -1118,7 +1118,7 @@ class PressureGridLarge extends ConsumerWidget {
 
         if (
         baseline != null &&
-            baseline.length == 36
+            baseline.length == 210
         ) {
           final baselineValue =
           baseline[sensorNumber - 1];

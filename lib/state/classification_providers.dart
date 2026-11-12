@@ -71,9 +71,9 @@ class BaselineFrame extends _$BaselineFrame {
   }
 
   void setBaseline(List<double> frame) {
-    if (frame.length != 36) {
+    if (frame.length != 210) {
       throw Exception(
-        'Baseline frame must contain 36 values.',
+        'Baseline frame must contain 210 values.',
       );
     }
 
@@ -182,9 +182,9 @@ class CurrentFrame extends _$CurrentFrame {
   }
 
   void setFrame(List<double> frame) {
-    if (frame.length != 36) {
+    if (frame.length != 210) {
       throw Exception(
-        'Current frame must contain 36 values.',
+        'Current frame must contain 210 values.',
       );
     }
 
@@ -227,9 +227,9 @@ class NormalisedFrame extends _$NormalisedFrame {
   }
 
   void setFrame(List<double> frame) {
-    if (frame.length != 36) {
+    if (frame.length != 210) {
       throw Exception(
-        'Normalised frame must contain 36 values.',
+        'Normalised frame must contain 210 values.',
       );
     }
 

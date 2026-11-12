@@ -43,8 +43,8 @@ class MqttService {
 
     final sensorNumber = parsed.sensorNumber;
 
-    if (sensorNumber == 36) {
-      print('Sensor 36 received');
+    if (sensorNumber == 210) {
+      print('Sensor 210 received');
     }
 
     // 2. Decode JSON
@@ -66,8 +66,8 @@ class MqttService {
         .read(latestSensorValuesProvider.notifier)
         .update(reading);
 
-    // Build a full mattress frame every time sensor 36 arrives
-    if (sensorNumber == 36) {
+    // Build a full mattress frame every time sensor 210 arrives
+    if (sensorNumber == 210) {
       final latestValues =
       ref.read(latestSensorValuesProvider);
 
@@ -141,7 +141,7 @@ class MqttService {
     // Capture complete mattress frame during calibration
     if (
     ref.read(calibrationRunningProvider) &&
-        sensorNumber == 36
+        sensorNumber == 210
     ) {
       print('=== CALIBRATION FRAME CAPTURE ===');
 
@@ -192,7 +192,7 @@ class MqttService {
 
     if (
     ref.read(classificationRunningProvider) &&
-        sensorNumber == 36
+        sensorNumber == 210
     ) {
       final latestValues =
       ref.read(latestSensorValuesProvider);

@@ -39,7 +39,7 @@ class SessionHistory extends _$SessionHistory {
     final snap = await FirebaseFirestore.instance
         .collection('patients')
         .doc(patientId)
-        .collection('sessions')
+        .collection('Printed_sessions')
         .orderBy('startTime', descending: true)
         .get();
 

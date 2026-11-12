@@ -14,7 +14,7 @@ class MaxPressureAlarmService {
       return null;
     }
 
-    for (int sensor = 1; sensor <= 36; sensor++) {
+    for (int sensor = 1; sensor <= 210; sensor++) {
 
       final config =
       settings.sensorConfigs[sensor];

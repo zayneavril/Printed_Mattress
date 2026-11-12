@@ -67,7 +67,7 @@ class CalibrationService {
     }
 
     final baseline = List<double>.generate(
-      36,
+      210,
           (sensorIndex) {
         double sum = 0;
 

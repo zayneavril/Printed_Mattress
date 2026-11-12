@@ -203,7 +203,7 @@ Future<void> exportSessionToCsvWide({
   final sensorsSnap = await firestore
       .collection('patients')
       .doc(patient.id)
-      .collection('sessions')
+      .collection('Printed_sessions')
       .doc(session.id)
       .collection('sensors')
       .get();

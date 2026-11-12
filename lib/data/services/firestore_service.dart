@@ -12,7 +12,7 @@ class FirestoreService {
   }
 
   CollectionReference<Map<String, dynamic>> sessionsRef(String patientId) {
-    return patientDoc(patientId).collection('sessions');
+    return patientDoc(patientId).collection('Printed_sessions');
   }
 
   DocumentReference<Map<String, dynamic>> sessionDoc(String patientId, String sessionId) {
