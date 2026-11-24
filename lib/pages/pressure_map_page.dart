@@ -44,17 +44,108 @@ class _PressureMapPageState
 
   int _currentPage = 0;
 
-  static const List<int> pressurePageLayout = [
-    8, 7, 6, 5,
-    10, 9, 4, 3,
-    12, 11, 2, 1,
-    20, 19, 18, 17,
-    22, 21, 16, 15,
-    24, 23, 14, 13,
-    32, 31, 30, 29,
-    34, 33, 28, 27,
-    36, 35, 26, 25,
-  ];
+
+  Widget buildBankGrid(
+      int firstSensor,
+      Map<int, double> sensorValues,
+      List<double>? baseline,
+      bool showValues,
+      ) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics:
+      const NeverScrollableScrollPhysics(),
+      gridDelegate:
+      const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 10,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        childAspectRatio: 1.0,
+      ),
+      itemCount: 70,
+      itemBuilder: (context, index) {
+
+        final row = index ~/ 10;
+        final col = index % 10;
+
+        final sensorNumber =
+            firstSensor +
+                row * 10 +
+                (9 - col);
+
+        final value =
+            sensorValues[sensorNumber] ??
+                0.0;
+
+        double normalized = 0.0;
+
+        if (baseline != null &&
+            baseline.length == 210) {
+
+          final baselineValue =
+          baseline[sensorNumber - 1];
+
+          if (baselineValue > 0) {
+            normalized =
+                (value - baselineValue) /
+                    baselineValue;
+          }
+        }
+
+        Color color;
+
+        if (normalized < 0.20) {
+          color = Colors.green.shade500;
+        } else if (normalized < 0.30) {
+          color = Colors.teal.shade700;
+        } else if (normalized < 0.60) {
+          color = Colors.yellow.shade400;
+        } else if (normalized < 1.00) {
+          color = Colors.yellow.shade700;
+        } else if (normalized < 1.50) {
+          color = Colors.orange.shade700;
+        } else {
+          color = Colors.red.shade700;
+        }
+
+        return AnimatedContainer(
+          duration:
+          const Duration(milliseconds: 250),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius:
+            BorderRadius.circular(12),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 6,
+                left: 6,
+                child: Text(
+                  'S$sensorNumber',
+                  style: const TextStyle(
+                    fontSize: 8,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+              if (showValues)
+                Center(
+                  child: Text(
+                    '+${(normalized * 100).toStringAsFixed(0)}%',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,174 +277,63 @@ class _PressureMapPageState
                 });
               },
               children: [
-                Column(
-                  children: [
-                    const SizedBox(height: 2),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 2),
 
-                    const Text(
-                      'HEAD',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    // const Text(
+                    //   'HEAD',
+                    //   style: TextStyle(
+                    //     fontSize: 18,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
 
                     const SizedBox(height: 8),
 
-                    Flexible(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics:
-                        const NeverScrollableScrollPhysics(),
-                        padding:
-                        const EdgeInsets.all(8),
-                        gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                          childAspectRatio: 2.1,
+                        Column(
+                          children: [
+
+                            const Text('HEAD'),
+
+                            buildBankGrid(
+                              1,
+                              sensorValues,
+                              baseline,
+                              showValues,
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            const Text('TORSO'),
+
+                            buildBankGrid(
+                              71,
+                              sensorValues,
+                              baseline,
+                              showValues,
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            const Text('LEGS'),
+
+                            buildBankGrid(
+                              141,
+                              sensorValues,
+                              baseline,
+                              showValues,
+                            ),
+                          ],
                         ),
-                        itemCount:
-                        pressurePageLayout.length,
-                        itemBuilder:
-                            (context, index) {
-                          final sensorNumber =
-                          pressurePageLayout[
-                          index];
 
-                          final value =
-                          baseline == null
-                              ? 0.0
-                              : (sensorValues[
-                          sensorNumber] ??
-                              0.0);
+                    const SizedBox(height: 12),
 
-                          double normalized = 0.0;
-
-                          if (baseline != null &&
-                              baseline.length ==
-                                  36) {
-                            final baselineValue =
-                            baseline[
-                            sensorNumber - 1];
-
-                            if (baselineValue >
-                                0) {
-                              normalized =
-                                  (value -
-                                      baselineValue) /
-                                      baselineValue;
-                            }
-                          }
-
-                          Color color;
-
-                          if (normalized < 0.20) {
-                            color = Colors
-                                .green.shade500;
-                          } else if (normalized <
-                              0.30) {
-                            color =
-                                Colors.teal.shade700;
-                          } else if (normalized <
-                              0.60) {
-                            color =
-                                Colors.yellow.shade400;
-                          } else if (normalized <
-                              1.00) {
-                            color = Colors
-                                .yellow.shade700;
-                          } else if (normalized <
-                              1.50) {
-                            color = Colors
-                                .orange.shade700;
-                          } else {
-                            color =
-                                Colors.red.shade700;
-                          }
-
-                          return AnimatedContainer(
-                            duration:
-                            const Duration(
-                              milliseconds: 250,
-                            ),
-                            decoration:
-                            BoxDecoration(
-                              color: color,
-                              borderRadius:
-                              BorderRadius
-                                  .circular(
-                                12,
-                              ),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 6,
-                                  left: 6,
-                                  child: Container(
-                                    padding:
-                                    const EdgeInsets.symmetric(
-                                      horizontal:
-                                      6,
-                                      vertical: 2,
-                                    ),
-                                    decoration:
-                                    BoxDecoration(
-                                      color: Colors
-                                          .black
-                                          .withValues(
-                                          alpha:
-                                          0.25),
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          6),
-                                    ),
-                                    child: Text(
-                                      'S$sensorNumber',
-                                      style:
-                                      const TextStyle(
-                                        fontSize:
-                                        8,
-                                        color: Colors
-                                            .white70,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                //
-                                if (showValues)
-                                  Center(
-                                    child: Text(
-                                      '+${(normalized * 100).toStringAsFixed(0)}%',
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    const Text(
-                      'FEET',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
+                      const SizedBox(height: 8),
                   ],
                 ),
+              ),
 
                 Column(
                   children: [
@@ -418,7 +398,7 @@ class _SensorLegend extends ConsumerWidget {
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 36,
+                itemCount: 210,
                 gridDelegate:
                 const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3, // ✅ 3 columns = readable
@@ -477,7 +457,7 @@ class _LivePressureChart extends ConsumerWidget {
       );
     }
 
-    final now = DateTime.now().millisecondsSinceEpoch.toDouble();
+    // final now = DateTime.now().millisecondsSinceEpoch.toDouble();
 
     // final Map<int, List<SensorReading>> grouped = {};
     // for (final r in readings) {
